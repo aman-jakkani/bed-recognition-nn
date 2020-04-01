@@ -15,7 +15,7 @@ from sklearn.model_selection import train_test_split
 from skimage.transform import resize
 import json
 
-model = load_model('bedmodel.h5')
+model = load_model('bedmodel1.h5')
 #get test data 
 testdata = pd.read_csv('test_map.csv')
 test_imgs = []
