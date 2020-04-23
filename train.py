@@ -5,7 +5,7 @@ import keras
 from keras.models import Sequential
 from keras.applications.vgg16 import preprocess_input
 from keras.layers import Dense, InputLayer, Dropout, Flatten
-from keras.layers import Conv2D, MaxPooling2D, GlobalMaxPooling2D
+from keras.layers import Conv2D, MaxPooling2D
 from keras.preprocessing import image
 from keras.utils import np_utils
 from keras.callbacks import ModelCheckpoint, EarlyStopping
@@ -40,11 +40,10 @@ x_train = x_train / 255
 x_valid = x_valid / 255
 print(x_train.shape, x_valid.shape, y_train.shape, y_valid.shape)
 
-train_datagen = image.ImageDataGenerator(zoom_range=0.3, width_shift_range=0.2, height_shift_range=0.2, 
-horizontal_flip=True, fill_mode='nearest')
+train_datagen = image.ImageDataGenerator(zoom_range=0.3, width_shift_range=0.2, height_shift_range = 0.2, horizontal_flip=True, fill_mode='nearest')
 val_datagen = image.ImageDataGenerator()
-train_generator = train_datagen.flow(x_train, y_train,batch_size=24)
-val_generator = val_datagen.flow(x_valid, y_valid, batch_size=24)
+train_generator = train_datagen.flow(x_train, y_train,batch_size=16)
+val_generator = val_datagen.flow(x_valid, y_valid, batch_size=16)
 
 #building model
 model = Sequential()
@@ -59,10 +58,12 @@ model.add(Dense(1024, activation='relu'))
 model.add(Dense(2, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-checkpoint = ModelCheckpoint("bedmodel.h5", monitor='val_loss', verbose=1, save_best_only=True, 
+checkpoint = ModelCheckpoint("bedmodel.h5", monitor='val_accuracy', verbose=1, save_best_only=True, 
  save_weights_only=False, mode='auto', period=1)
 
-early = EarlyStopping(monitor='val_loss', min_delta=0, patience=7, verbose=1, mode='auto')
+early = EarlyStopping(monitor='val_accuracy', min_delta=0, patience=7, verbose=1, mode='auto')
 
 hist = model.fit_generator(steps_per_epoch=50,generator=train_generator, validation_data= 
  val_generator, validation_steps=10,epochs=40,callbacks=[checkpoint,early])
+
+ 
