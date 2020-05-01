@@ -22,7 +22,7 @@ d = os.path.dirname(os.getcwd())
 model = load_model(d+'/bedmodel.h5')
 #get test data frames
 frame_count = 0
-videoFile = 'test1.mp4'
+videoFile = 'testvideo.mp4'
 cap = cv2.VideoCapture(videoFile)
 frameRate = cap.get(5)
 while(cap.isOpened()):
